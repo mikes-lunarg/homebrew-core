@@ -65,6 +65,9 @@ class MoltenVk < Formula
         revision: "ef9db7a8ec52f6c56158d83f5d57ef388c1abec1"
   end
 
+  # Fix the relative library path in the driver manifest file
+  patch :DATA
+
   def install
     resources.each do |res|
       res.stage(buildpath/"External"/res.name)
@@ -166,3 +169,12 @@ class MoltenVk < Formula
     system "./test"
   end
 end
+
+__END__
+diff --git a/MoltenVK/icd/MoltenVK_icd.json b/MoltenVK/icd/MoltenVK_icd.json
+index 9c9c182c..31ca005c 100644
+--- a/MoltenVK/icd/MoltenVK_icd.json
++++ b/MoltenVK/icd/MoltenVK_icd.json
+@@ -4 +4 @@
+-        "library_path": "./libMoltenVK.dylib",
++        "library_path": "../../../lib/libMoltenVK.dylib",
